@@ -1,5 +1,5 @@
 #!/bin/sh
-
+#Create prometheus.yml file incase it is not already created
 sudo nano /etc/prometheus/prometheus.yml
 
 "
@@ -47,5 +47,3 @@ sudo systemctl start prometheus
 # Check Prometheus Status
 sudo systemctl status prometheus
 
-#Access Prometheus Web Interface
-sudo ufw allow 9090/tcp

@@ -15,6 +15,9 @@ sudo mkdir /var/lib/prometheus
 wget https://github.com/prometheus/prometheus/releases/download/v2.49.1/prometheus-2.49.1.linux-amd64.tar.gz
 tar vxf prometheus*.tar.gz
 
+#open port 9090 and Access Prometheus Web Interface
+sudo ufw allow 9090/tcp
+
 
 #Navigate to the Prometheus Directory
 cd prometheus*/
@@ -34,3 +37,6 @@ sudo chown prometheus:prometheus /etc/prometheus
 sudo chown -R prometheus:prometheus /etc/prometheus/consoles
 sudo chown -R prometheus:prometheus /etc/prometheus/console_libraries
 sudo chown -R prometheus:prometheus /var/lib/prometheus
+
+#remove prometheus downloaded files
+rm -rf prometheus-2.49.1.linux-amd64.tar.gz prometheus-2.49.1.linux-amd64
