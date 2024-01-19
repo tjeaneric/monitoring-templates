@@ -26,8 +26,23 @@ WantedBy=multi-user.target
 sudo systemctl daemon-reload
 
 #Start Node-exporter Service
-sudo systemctl enable node-exporter
-sudo systemctl start node-exporter
+sudo systemctl enable node_exporter
+sudo systemctl start node_exporter
 
 # Check Node-exporter Status
-sudo systemctl status node-exporter
+sudo systemctl status node_exporter
+
+#Configure Prometheus Server(Edit prometheus.yml file)
+sudo nano /etc/prometheus/prometheus.yml
+
+#Update and Add job to prometheus server to monitor the new created node exporter
+"
+  - job_name: 'node_exporter'
+
+    static_configs:
+
+      - targets: ['localhost:9100']
+"
+
+#Restart prometheus server
+sudo systemctl restart prometheus
