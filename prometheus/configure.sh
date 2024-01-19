@@ -27,11 +27,15 @@ After=network-online.target
 User=prometheus
 Group=prometheus
 Type=simple
+Restart=on-failure
+RestartSec=5s
 ExecStart=/usr/local/bin/prometheus \
     --config.file /etc/prometheus/prometheus.yml \
     --storage.tsdb.path /var/lib/prometheus/ \
     --web.console.templates=/etc/prometheus/consoles \
     --web.console.libraries=/etc/prometheus/console_libraries
+    --web.enable-lifecycle
+
 
 [Install]
 WantedBy=multi-user.target
