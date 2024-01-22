@@ -26,5 +26,6 @@ sudo systemctl status grafana-server
 
 #Open the port in the firewall
 sudo ufw enable 
+sudo ufw allow ssh
 sudo ufw allow 3000/tcp
 
