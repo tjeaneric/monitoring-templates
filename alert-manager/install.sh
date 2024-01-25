@@ -1,7 +1,7 @@
 #!bin/bash
 
 #Install Alert-manager binaries
-wget alertmanager-0.26.0.linux-amd64.tar.gz
+wget https://github.com/prometheus/alertmanager/releases/download/v0.26.0/alertmanager-0.26.0.linux-amd64.tar.gz
 
 tar xvfz alertmanager-0.26.0.linux-amd64.tar.gz
 
