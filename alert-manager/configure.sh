@@ -70,10 +70,8 @@ receivers:
 # Create a rule
 sudo nano /etc/prometheus/rules.yml
 
-
-
-
 "
+# Instance down rule
 groups:
 - name: AllInstances
   rules:
@@ -89,6 +87,55 @@ groups:
     labels:
       severity: 'critical'
 "
+
+"
+# Rule for high storage usage alert
+groups:
+  - name: StorageThreshold
+    rules:
+      - alert: HighStorageUsage
+        expr: 100 * (1 - (node_filesystem_avail_bytes / node_filesystem_size_bytes{mountpoint="/"})) > 50
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High storage usage on {{ $labels.instance }}"
+          description: "Storage usage on {{ $labels.instance }} is greater than 50%."
+"
+
+"
+# Rule for memory usage alert
+groups:
+  - name: MemoryThreshold
+    rules:
+      - alert: HighRAMUsage
+        expr: 100 * (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) > 60
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High RAM usage on {{ $labels.instance }}"
+          description: "RAM usage on {{ $labels.instance }} is greater than 60%."
+"
+
+"
+# Rule to get an alert when the CPU usage goes more than 60%.
+groups:
+  - name: CpuThreshold
+    rules:
+      - alert: HighCPUUsage
+        expr: 100 - (avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 60
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High CPU usage on {{ $labels.instance }}"
+          description: "CPU usage on {{ $labels.instance }} is greater than 60%."
+"
+
+# Add the rules to the prometheus.yml file
+sudo nano /etc/prometheus/prometheus.yml
+
 
 # Reload Systemd
 sudo systemctl daemon-reload 
