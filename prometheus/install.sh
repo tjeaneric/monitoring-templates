@@ -40,3 +40,50 @@ sudo chown -R prometheus:prometheus /var/lib/prometheus
 
 #remove prometheus downloaded files
 rm -rf prometheus-2.49.1.linux-amd64.tar.gz prometheus-2.49.1.linux-amd64
+
+
+cat > /etc/prometheus/prometheus.yml << EOF;
+global:
+  scrape_interval: 15s
+  external_labels:
+    monitor: 'prometheus'
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+EOF
+
+[Unit]
+Description=Prometheus
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=prometheus
+Group=prometheus
+Type=simple
+Restart=on-failure
+RestartSec=5s
+ExecStart=/usr/local/bin/prometheus \
+    --config.file /etc/prometheus/prometheus.yml \
+    --storage.tsdb.path /var/lib/prometheus/ \
+    --web.console.templates=/etc/prometheus/consoles \
+    --web.console.libraries=/etc/prometheus/console_libraries
+    --web.enable-lifecycle
+
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+
+#Reload Systemd
+sudo systemctl daemon-reload
+
+#Start Prometheus Service
+sudo systemctl enable prometheus
+sudo systemctl start prometheus
+
+# Check Prometheus Status
+sudo systemctl status prometheus
