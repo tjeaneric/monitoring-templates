@@ -41,8 +41,8 @@ sudo chown -R prometheus:prometheus /var/lib/prometheus
 #remove prometheus downloaded files
 rm -rf prometheus-2.49.1.linux-amd64.tar.gz prometheus-2.49.1.linux-amd64
 
-
-cat > /etc/prometheus/prometheus.yml << EOF;
+#Create prometheus.yml file incase it is not already created
+sudo tee /etc/prometheus/prometheus.yml << EOF;
 global:
   scrape_interval: 15s
   external_labels:
@@ -54,6 +54,8 @@ scrape_configs:
       - targets: ['localhost:9090']
 EOF
 
+#Create Prometheus Systemd Service
+sudo tee /etc/systemd/system/prometheus.service << EOF;
 [Unit]
 Description=Prometheus
 Wants=network-online.target
